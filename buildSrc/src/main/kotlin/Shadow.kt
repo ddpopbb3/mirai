@@ -99,7 +99,7 @@ private fun KotlinTarget.configureRelocationForMppTarget(project: Project) = pro
         group = "mirai"
         description = "Relocate dependencies to internal package"
         destinationDirectory.set(buildDir.resolve("libs")) // build/libs
-        archiveBaseName.set("${project.name}-${targetName.toLowerCase()}") // e.g. "mirai-core-api-jvm"
+        archiveBaseName.set("${project.name}-${targetName.lowercase()}") // e.g. "mirai-core-api-jvm"
 
         dependsOn(compilations["main"].compileTaskProvider) // e.g. compileKotlinJvm
 

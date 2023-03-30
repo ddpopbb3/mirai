@@ -37,7 +37,7 @@ val MIRAI_PLATFORM_INTERMEDIATE = Attribute.of(
 
 val IDEA_ACTIVE = System.getProperty("idea.active") == "true" && System.getProperty("publication.test") != "true"
 
-val OS_NAME = System.getProperty("os.name").toLowerCase()
+val OS_NAME = System.getProperty("os.name").lowercase()
 
 lateinit var osDetector: OsDetector
 
@@ -387,10 +387,10 @@ fun KotlinMultiplatformExtension.configureNativeTargetBinaries(project: Project)
         val target = targets.getByName(targetName) as KotlinNativeTarget
         target.binaries {
             sharedLib(listOf(NativeBuildType.DEBUG, NativeBuildType.RELEASE)) {
-                baseName = project.name.toLowerCase().replace("-", "")
+                baseName = project.name.lowercase().replace("-", "")
             }
             staticLib(listOf(NativeBuildType.DEBUG, NativeBuildType.RELEASE)) {
-                baseName = project.name.toLowerCase().replace("-", "")
+                baseName = project.name.lowercase().replace("-", "")
             }
         }
     }
