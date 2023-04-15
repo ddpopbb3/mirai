@@ -187,38 +187,38 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Cache konan
+      -   name: Cache konan
         uses: pat-s/always-upload-cache@v3.0.11
-        with:
-          path: ~/.konan
-          key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle.kts') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          with:
+              path: ~/.konan
+              key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle.kts') }}
+              restore-keys: |
+                  ${{ runner.os }}-gradle-
 
-      - if: ${{ env.isUnix == 'true' }}
-        run: chmod -R 777 *
+      -   if: ${{ env.isUnix == 'true' }}
+          run: chmod -R 777 *
+        
+        # Prepare environment for linking for macOS
+        #
+        #      - if: ${{ env.isMac == 'true' }}
+        #        name: Install OpenSSL
+        #        run: >
+        #          git clone https://github.com/openssl/openssl.git --recursive &&
+        #          cd openssl &&
+        #          git checkout tags/openssl-3.0.3 &&
+        #          ./Configure --prefix=/opt/openssl --openssldir=/usr/local/ssl &&
+        #          make &&
+        #          sudo make install
 
-      # Prepare environment for linking for macOS
+      -   name: Clean and download dependencies
+          run: ./gradlew clean ${{ env.gradleArgs }}
 
-      - if: ${{ env.isMac == 'true' }}
-        name: Install OpenSSL
-        run: >
-          git clone https://github.com/openssl/openssl.git --recursive &&
-          cd openssl &&
-          git checkout tags/openssl-3.0.3 &&
-          ./Configure --prefix=/opt/openssl --openssldir=/usr/local/ssl &&
-          make &&
-          sudo make install
-
-      - name: Clean and download dependencies
-        run: ./gradlew clean ${{ env.gradleArgs }}
-
-      - run: >
-          ./gradlew updateSnapshotVersion ${{ env.gradleArgs }}
-        if: github.event.pusher && vars.RUN_MIRAI_SNAPSHOTS == 'true'
-        env:
-          MIRAI_IS_SNAPSHOTS_PUBLISHING: true
-          SNAPSHOTS_PUBLISHING_USER: ${{ secrets.SNAPSHOTS_PUBLISHING_USER }}
+      -   run: >
+              ./gradlew updateSnapshotVersion ${{ env.gradleArgs }}
+          if: github.event.pusher && vars.RUN_MIRAI_SNAPSHOTS == 'true'
+          env:
+              MIRAI_IS_SNAPSHOTS_PUBLISHING: true
+              SNAPSHOTS_PUBLISHING_USER: ${{ secrets.SNAPSHOTS_PUBLISHING_USER }}
           SNAPSHOTS_PUBLISHING_KEY: ${{ secrets.SNAPSHOTS_PUBLISHING_KEY }}
           SNAPSHOTS_PUBLISHING_URL: ${{ secrets.SNAPSHOTS_PUBLISHING_URL }}
           MIRAI_BUILD_INDEX_AUTH_USERNAME: ${{ secrets.MIRAI_BUILD_INDEX_AUTH_USERNAME }}
