@@ -113,7 +113,7 @@ if (tasks.findByName("androidMainClasses") != null) {
         group = "verification"
         this.mustRunAfter("androidMainClasses")
     }
-    tasks.getByName("androidTest").dependsOn("checkAndroidApiLevel")
+    tasks.getByName("androidBaseTest").dependsOn("checkAndroidApiLevel")
 }
 
 configureMppPublishing()
