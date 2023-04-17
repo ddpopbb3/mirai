@@ -54,7 +54,7 @@ object Versions {
     const val dynamicDelegation = "0.4.0-180.1"
     const val mavenCentralPublish = "1.0.0"
 
-    const val androidGradlePlugin = "4.1.1"
+    const val androidGradlePlugin = "7.1.3"
     const val android = "4.1.1.4"
 
     const val shadow = "8.1.0"

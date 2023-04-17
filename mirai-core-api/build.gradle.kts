@@ -11,6 +11,7 @@
 import BinaryCompatibilityConfigurator.configureBinaryValidators
 
 plugins {
+    id("com.android.library")
     kotlin("multiplatform")
     kotlin("plugin.serialization")
 
