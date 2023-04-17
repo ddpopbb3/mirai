@@ -10,9 +10,9 @@
 @file:Suppress("UnusedImport")
 
 plugins {
-    id("com.android.library")
     kotlin("multiplatform")
     `maven-publish`
+    id("com.android.library")
 }
 
 version = Versions.console
@@ -20,9 +20,14 @@ description = "Mirai Console compiler annotations"
 
 kotlin {
     explicitApi()
+    apply(plugin = "explicit-api")
 
     configureJvmTargetsHierarchical()
     configureNativeTargetsHierarchical(project)
 }
 
 configureMppPublishing()
+
+android {
+    namespace = "net.mamoe.mirai.compiler.annotations"
+}

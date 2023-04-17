@@ -28,10 +28,11 @@ description = "Mirai API module"
 
 kotlin {
     explicitApi()
+    apply(plugin = "explicit-api")
+
     configureJvmTargetsHierarchical()
 
     configureNativeTargetsHierarchical(project)
-
 
     sourceSets {
         val commonMain by getting {
@@ -45,7 +46,10 @@ kotlin {
                 implementation(project(":mirai-console-compiler-annotations"))
                 implementation(`kotlinx-serialization-protobuf`)
                 implementation(`kotlinx-atomicfu`)
-                relocateCompileOnly(`ktor-io_relocated`) // runtime from mirai-core-utils
+
+                // runtime from mirai-core-utils
+                relocateCompileOnly(`ktor-io_relocated`)
+
                 implementation(`kotlin-jvm-blocking-bridge`)
                 implementation(`kotlin-dynamic-delegation`)
             }
@@ -66,9 +70,17 @@ kotlin {
             }
         }
 
+        afterEvaluate {
+            getByName("androidUnitTest") {
+                dependencies {
+                    runtimeOnly(`slf4j-api`)
+                }
+            }
+        }
+
         findByName("androidMain")?.apply {
             dependencies {
-                compileOnly(`android-runtime`)
+//                compileOnly(`android-runtime`)
             }
         }
 
@@ -114,3 +126,7 @@ configureBinaryValidators(setOf("jvm", "android").filterTargets())
 //    licenseFromGitHubProject("AGPLv3", "dev")
 //    publishPlatformArtifactsInRootModule = "jvm"
 //}
+
+android {
+    namespace = "net.mamoe.mirai"
+}

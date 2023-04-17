@@ -11,7 +11,7 @@ package net.mamoe.mirai.internal.test
 
 //import org.bouncycastle.jce.provider.BouncyCastleProvider
 import net.mamoe.mirai.utils.MiraiLogger
-import kotlin.test.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertIs
 
 internal actual fun initPlatform() {

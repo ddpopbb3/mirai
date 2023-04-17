@@ -28,6 +28,7 @@ description = "Mirai Protocol implementation for QQ Android"
 
 kotlin {
     explicitApi()
+    apply(plugin = "explicit-api")
 
     configureJvmTargetsHierarchical()
     configureNativeTargetsHierarchical(project)
@@ -236,3 +237,7 @@ configureBinaryValidators(setOf("jvm", "android").filterTargets())
 //    licenseFromGitHubProject("AGPLv3", "dev")
 //    publishPlatformArtifactsInRootModule = "jvm"
 //}
+
+android {
+    namespace = "net.mamoe.mirai.internal"
+}

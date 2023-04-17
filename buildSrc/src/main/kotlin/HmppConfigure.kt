@@ -191,21 +191,45 @@ fun Project.configureJvmTargetsHierarchical() {
             if (isAndroidSDKAvailable) {
 //                apply(plugin = "com.android.library")
                 android {
-                    attributes.attribute(KotlinPlatformType.attribute, KotlinPlatformType.androidJvm)
                     if (IDEA_ACTIVE) {
                         attributes.attribute(MIRAI_PLATFORM_ATTRIBUTE, "android") // avoid resolution
                     }
                 }
                 configureAndroidTarget()
-                val androidMain by sourceSets.getting {
-                    dependsOn(jvmBaseMain)
+                val androidMain by sourceSets.getting
+                for (s in arrayOf("androidMain")) {
+                    sourceSets.all { if (name in s) dependsOn(jvmBaseMain) }
                 }
+                // this can cause problems on sync
+//                for (s in arrayOf("androidDebug", "androidRelease")) {
+//                    sourceSets.all { if (name in s) dependsOn(androidMain) }
+//                }
                 val androidUnitTest by sourceSets.getting {
                     dependsOn(jvmBaseTest)
                 }
+//                for (s in arrayOf("androidUnitTestDebug", "androidUnitTestRelease")) {
+//                    sourceSets.all { if (name in s) dependsOn(androidUnitTest) }
+//                }
                 val androidInstrumentedTest by sourceSets.getting {
                     dependsOn(jvmBaseTest)
                 }
+//                for (s in arrayOf("androidInstrumentedTestDebug")) {
+//                    sourceSets.all { if (name in s) dependsOn(androidInstrumentedTest) }
+//                }
+
+//                afterEvaluate {
+////                    > androidDebug dependsOn commonMain
+////                    androidInstrumentedTest dependsOn jvmBaseTest
+////                    androidInstrumentedTestDebug dependsOn
+////                    androidMain dependsOn commonMain, jvmBaseMain
+////                    androidRelease dependsOn commonMain
+////                    androidUnitTest dependsOn commonTest, jvmBaseTest
+////                    androidUnitTestDebug dependsOn commonTest
+////                    androidUnitTestRelease dependsOn commonTest
+//                    error(this@apply.sourceSets.joinToString("\n") {
+//                        it.name + " dependsOn " + it.dependsOn.joinToString { it.name }
+//                    })
+//                }
             } else {
                 printAndroidNotInstalled()
             }
@@ -226,6 +250,8 @@ fun Project.configureJvmTargetsHierarchical() {
 @Suppress("UnstableApiUsage")
 fun Project.configureAndroidTarget() {
     extensions.getByType(KotlinMultiplatformExtension::class.java).apply {
+
+        // trick
         this.sourceSets.apply {
             removeIf { it.name == "androidAndroidTestRelease" }
             removeIf { it.name == "androidTestFixtures" }
@@ -239,6 +265,7 @@ fun Project.configureAndroidTarget() {
         sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
         defaultConfig {
             minSdk = rootProject.extra["mirai.android.target.api.level"]!!.toString().toInt()
+            @Suppress("DEPRECATION")
             targetSdk = 33
         }
         compileOptions {
@@ -389,7 +416,7 @@ fun KotlinMultiplatformExtension.configureNativeTargetsHierarchical(
     // Register platform tasks, e.g. linkDebugSharedHost
     project.afterEvaluate {
         val targetName = HOST_KIND.targetName
-        val targetNameCapitalized = targetName.capitalize(Locale.ROOT)
+        val targetNameCapitalized = targetName.capitalize()
         project.tasks.run {
             listOf(
                 "compileKotlin",

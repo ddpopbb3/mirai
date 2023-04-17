@@ -133,7 +133,9 @@ fun Project.configureKotlinTestSettings() {
 
                 when {
                     sourceSet.name == "commonTest" -> {
-                        if (target?.platformType == KotlinPlatformType.jvm) {
+                        if (target?.platformType == KotlinPlatformType.jvm &&
+                            target.attributes.getAttribute(MIRAI_PLATFORM_INTERMEDIATE) != true
+                        ) {
                             configureJvmTest(sourceSet)
                         } else {
                             sourceSet.dependencies {
@@ -144,7 +146,9 @@ fun Project.configureKotlinTestSettings() {
                     }
 
                     sourceSet.name.contains("test", ignoreCase = true) -> {
-                        if (target?.platformType == KotlinPlatformType.jvm) {
+                        if (target?.platformType == KotlinPlatformType.jvm &&
+                            target.attributes.getAttribute(MIRAI_PLATFORM_INTERMEDIATE) != true
+                        ) {
                             configureJvmTest(sourceSet)
                         }
                     }
@@ -161,7 +165,9 @@ val testExperimentalAnnotations = arrayOf(
     "kotlin.ExperimentalUnsignedTypes",
     "kotlin.time.ExperimentalTime",
     "io.ktor.util.KtorExperimentalAPI",
-    "kotlin.io.path.ExperimentalPathApi"
+    "kotlin.io.path.ExperimentalPathApi",
+    "kotlinx.coroutines.ExperimentalCoroutinesApi",
+    "net.mamoe.mirai.utils.TestOnly",
 )
 
 val experimentalAnnotations = arrayOf(

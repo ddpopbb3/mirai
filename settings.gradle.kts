@@ -166,8 +166,6 @@ fun includeConsoleIntegrationTestProjects() {
 }
 
 
-
-
 fun getLocalProperty(name: String): String? {
     return localProperties.getProperty(name)
 }
