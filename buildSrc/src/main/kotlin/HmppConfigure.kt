@@ -265,7 +265,6 @@ fun Project.configureAndroidTarget() {
         sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
         defaultConfig {
             minSdk = rootProject.extra["mirai.android.target.api.level"]!!.toString().toInt()
-            @Suppress("DEPRECATION")
             targetSdk = 33
         }
         compileOptions {
